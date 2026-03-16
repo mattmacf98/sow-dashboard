@@ -1,0 +1,13 @@
+{
+	"module_id": "mattmacf:sow-dashboard-beta",
+	"visibility": "public",
+	"url": "https://github.com/mattmacf98/sow-dashboard",
+	"description": "Sow Dashboard",
+	"applications": [
+		{
+			"name": "sow-dashboard",
+			"type": "multi_machine",
+			"entrypoint": "dist/index.html"
+		}
+	]
+}

@@ -1,0 +1,31 @@
+name: Claude Issue Implementation
+
+on:
+  issues:
+    types: [opened, labeled]
+
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+
+jobs:
+  implement:
+    if: >-
+      github.repository_owner == 'mattmacf98' &&
+      (contains(github.event.issue.labels.*.name, 'claude') ||
+      contains(github.event.issue.body, '@claude'))
+    # viamrobotics/claude-ci-workflows@v1.14.0
+    uses: viamrobotics/claude-ci-workflows/.github/workflows/claude-github-issue.yml@0a9af2603e5218af7448f59536a9f698b35d235f
+    with:
+      issue_number: ${{ github.event.issue.number }}
+      title: ${{ github.event.issue.title }}
+      body: ${{ github.event.issue.body }}
+      repository_owner: mattmacf98
+      install_command: npm ci
+      allowed_tools: 'Edit,Read,Write,Glob,Grep,Bash(make *),Bash(pnpm *),Bash(npx prettier *),Bash(npx svelte-kit *),Bash(svelte-kit *),Bash(svelte-check *),Bash(npm run build*),Bash(npm run lint*),Bash(gh pr *),Bash(npm run test*),Bash(npm run sanity*),Bash(npm run typecheck*),Bash(npm run prettier*),Bash(git config *),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git status*),Bash(git diff*),Bash(git log*),Bash(git checkout *),Bash(git branch *),Bash(git rev-parse *),Bash(git fetch *)'
+      extra_prompt: |
+        - use git push to push your changes to the remote repository. It is very impotant to do this.
+        - Try to fix lint errors but if you cannot make sure to at least open a pull request.
+    secrets:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
