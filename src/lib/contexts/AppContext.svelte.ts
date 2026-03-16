@@ -3,15 +3,15 @@ import { appApi } from '@viamrobotics/sdk';
 type Organization = appApi.Organization;
 import { useAuthContext } from './AuthContext.svelte';
 
-const KEY = Symbol('orgs-context');
+const KEY = Symbol('app-context');
 
-export type OrgsContextValue = {
+export type AppContextValue = {
 	get organizations(): Organization[];
 	get loading(): boolean;
 	get error(): string | undefined;
 };
 
-export function createOrgsContext(): OrgsContextValue {
+export function createAppContext(): AppContextValue {
 	const authContext = useAuthContext();
 	let organizations = $state<Organization[]>([]);
 	let loading = $state(false);
@@ -37,7 +37,7 @@ export function createOrgsContext(): OrgsContextValue {
 			});
 	});
 
-	const ctx: OrgsContextValue = {
+	const ctx: AppContextValue = {
 		get organizations() {
 			return organizations;
 		},
@@ -53,8 +53,8 @@ export function createOrgsContext(): OrgsContextValue {
 	return ctx;
 }
 
-export function useOrgsContext(): OrgsContextValue {
-	const ctx = getContext<OrgsContextValue | undefined>(KEY);
+export function useAppContext(): AppContextValue {
+	const ctx = getContext<AppContextValue | undefined>(KEY);
 	if (!ctx) {
 		throw new Error('OrgsContext has not been created. Call createOrgsContext() in a parent component.');
 	}

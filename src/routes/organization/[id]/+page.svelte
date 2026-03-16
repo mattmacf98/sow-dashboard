@@ -30,11 +30,11 @@
 			{:else if orgContext.locationSummaries.length === 0}
 				<p class="mt-4 text-gray-500">No machines found for this organization.</p>
 			{:else}
-				{#each orgContext.locationSummaries as location}
+				{#each orgContext.locationSummaries as location (location.locationName)}
 					<div class="mt-6">
 						<h3 class="mb-2 text-lg font-medium text-gray-800">{location.locationName}</h3>
 						<ul class="space-y-2">
-							{#each location.machineSummaries as machine}
+							{#each location.machineSummaries as machine (machine.machineId)}
 								<li class="rounded-lg border border-gray-200 p-3">
 									<p class="font-medium text-gray-900">{machine.machineName}</p>
 									<p class="text-sm text-gray-500">ID: {machine.machineId}</p>
