@@ -12,7 +12,10 @@ const config = {
 			pages: 'dist',
 			assets: 'dist',
 			fallback: undefined
-		})
+		}),
+		prerender: {
+			handleUnseenRoutes: 'ignore'
+		}
 	}
 };
 
