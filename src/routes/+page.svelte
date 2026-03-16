@@ -1,41 +1,24 @@
 <script lang="ts">
 	import { createAuthContext } from '$lib/contexts/AuthContext.svelte';
+	import { createOrgsContext } from '$lib/contexts/OrgsContext.svelte';
 
 	const authContext = createAuthContext();
-	let organizations = $state<any[]>([]);
-
-	const fetchOrganizations = async () => {
-		if (!authContext.client) {
-			return;
-		}
-		try {
-			const response = await authContext.client.appClient.listOrganizations();
-			organizations = response;
-		} catch (error) {
-			console.error('Error listing organizations', error);
-		}
-	};
-
-	$effect(() => {
-		if (authContext.client) {
-			fetchOrganizations();
-		}
-	});
+	const orgsContext = createOrgsContext();
 </script>
 
-{#if authContext.accessToken}
-	<h1>Select an Organization</h1>
-	{#if organizations.length === 0}
-		<p>Loading organizations...</p>
-	{:else}
-		<ul>
-			{#each organizations as org}
-				<li>
-					<a href="/organization/{org.id}">{org.name}</a>
-				</li>
-			{/each}
-		</ul>
-	{/if}
-{:else}
+{#if !authContext.accessToken}
 	<h1>No user token found</h1>
+{:else if orgsContext.loading}
+	<p>Loading organizations...</p>
+{:else if orgsContext.error}
+	<p>Error: {orgsContext.error}</p>
+{:else}
+	<h1>Select an Organization</h1>
+	<ul>
+		{#each orgsContext.organizations as org}
+			<li>
+				<a href="/organization/{org.id}">{org.name}</a>
+			</li>
+		{/each}
+	</ul>
 {/if}
