@@ -1,5 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import { useOrgContext } from '$lib/contexts/OrgContext.svelte';
+
+	const orgContext = useOrgContext();
 </script>
 
 <div class="min-h-screen bg-gray-50">
@@ -19,6 +22,28 @@
 			<p class="mt-2 text-sm text-gray-500">
 				ID: <span class="font-mono text-gray-700">{page.params.id}</span>
 			</p>
+
+			{#if orgContext.loading}
+				<p class="mt-4 text-gray-500">Loading machines...</p>
+			{:else if orgContext.error}
+				<p class="mt-4 text-red-500">Error: {orgContext.error}</p>
+			{:else if orgContext.locationSummaries.length === 0}
+				<p class="mt-4 text-gray-500">No machines found for this organization.</p>
+			{:else}
+				{#each orgContext.locationSummaries as location}
+					<div class="mt-6">
+						<h3 class="mb-2 text-lg font-medium text-gray-800">{location.locationName}</h3>
+						<ul class="space-y-2">
+							{#each location.machineSummaries as machine}
+								<li class="rounded-lg border border-gray-200 p-3">
+									<p class="font-medium text-gray-900">{machine.machineName}</p>
+									<p class="text-sm text-gray-500">ID: {machine.machineId}</p>
+								</li>
+							{/each}
+						</ul>
+					</div>
+				{/each}
+			{/if}
 		</div>
 	</div>
 </div>
