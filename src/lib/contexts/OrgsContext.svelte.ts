@@ -1,5 +1,6 @@
 import { getContext, setContext } from 'svelte';
-import type { Organization } from '@viamrobotics/sdk';
+import { appApi } from '@viamrobotics/sdk';
+type Organization = appApi.Organization;
 import { useAuthContext } from './AuthContext.svelte';
 
 const KEY = Symbol('orgs-context');
