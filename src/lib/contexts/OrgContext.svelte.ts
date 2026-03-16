@@ -2,6 +2,7 @@ import { getContext, setContext } from 'svelte';
 import { appApi } from '@viamrobotics/sdk';
 type LocationSummary = appApi.LocationSummary;
 import { useAuthContext } from './AuthContext.svelte';
+import { FRAGMENT_ID } from '$lib/constants';
 
 const KEY = Symbol('org-context');
 
@@ -24,7 +25,7 @@ export function createOrgContext(orgId: string): OrgContextValue {
 		loading = true;
 		error = undefined;
 		authContext.client.appClient
-			.listMachineSummaries(orgId)
+			.listMachineSummaries(orgId, [FRAGMENT_ID])
 			.then((summaries) => {
 				locationSummaries = summaries;
 			})
