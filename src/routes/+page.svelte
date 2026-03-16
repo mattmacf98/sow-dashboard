@@ -15,7 +15,7 @@
 {:else}
 	<h1>Select an Organization</h1>
 	<ul>
-		{#each orgsContext.organizations as org}
+		{#each orgsContext.organizations as org (org.id)}
 			<li>
 				<a href="/organization/{org.id}">{org.name}</a>
 			</li>
