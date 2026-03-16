@@ -29,9 +29,9 @@
 		<p>Loading organizations...</p>
 	{:else}
 		<ul>
-			{#each organizations as org}
+			{#each organizations as org (org.id)}
 				<li>
-					<a href="/organization/{org.id}">{org.name}</a>
+					<a href={`/organization/${org.id}`}>{org.name}</a>
 				</li>
 			{/each}
 		</ul>
