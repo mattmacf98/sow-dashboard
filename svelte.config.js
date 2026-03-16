@@ -10,7 +10,8 @@ const config = {
 	kit: {
 		adapter: adapter({
 			pages: 'dist',
-			assets: 'dist'
+			assets: 'dist',
+			fallback: undefined
 		})
 	}
 };
