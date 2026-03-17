@@ -1,15 +1,16 @@
 <script lang="ts">
-	import { page } from '$app/state';
-	import { useOrgContext } from '$lib/contexts/OrgContext.svelte';
-	import MachineCard from '$lib/components/MachineCard.svelte';
+	import { createOrgContext } from '$lib/contexts/OrgContext.svelte';
+	import MachineCard from './MachineCard.svelte';
 
-	const orgContext = useOrgContext();
+	let { orgId }: { orgId: string } = $props();
+
+	const orgContext = createOrgContext(orgId);
 </script>
 
 <div class="min-h-screen bg-gray-50">
 	<div class="mx-auto max-w-2xl px-4 py-12">
 		<a
-			href="/"
+			href="#/"
 			class="mb-6 inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-800"
 		>
 			<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -21,7 +22,7 @@
 		<div class="rounded-lg border border-gray-200 bg-white p-8 shadow-sm">
 			<h1 class="text-2xl font-bold text-gray-900">Organization</h1>
 			<p class="mt-2 text-sm text-gray-500">
-				ID: <span class="font-mono text-gray-700">{page.params.id}</span>
+				ID: <span class="font-mono text-gray-700">{orgId}</span>
 			</p>
 
 			{#if orgContext.loading}
@@ -36,7 +37,7 @@
 						<h3 class="mb-2 text-lg font-medium text-gray-800">{location.locationName}</h3>
 						<ul class="space-y-2">
 							{#each location.machineSummaries as machine (machine.machineId)}
-							    <MachineCard machine={machine} />
+								<MachineCard {machine} />
 							{/each}
 						</ul>
 					</div>

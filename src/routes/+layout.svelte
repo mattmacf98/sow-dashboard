@@ -1,12 +1,14 @@
 <script lang="ts">
-    import './layout.css';
-    import { createAppContext } from '$lib/contexts/AppContext.svelte';
-    import { createAuthContext } from '$lib/contexts/AuthContext.svelte';
+	import './layout.css';
+	import { createAppContext } from '$lib/contexts/AppContext.svelte';
+	import { createAuthContext } from '$lib/contexts/AuthContext.svelte';
+	import { createHashRouter } from '$lib/router.svelte';
 
-    let { children } = $props();
+	let { children } = $props();
 
-    createAuthContext();
-    createAppContext();
+	createAuthContext();
+	createAppContext();
+	createHashRouter();
 </script>
 
 {@render children()}
