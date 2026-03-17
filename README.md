@@ -71,3 +71,7 @@ This allows you to safely roll back deployments without altering your git histor
 
 **Suggestions Welcome!**  
 If you have ideas to improve the skeleton please feel free to open an issue and request
+
+# TESTING
+
+viam module local-app-testing --app-url http://localhost:<PORT>
