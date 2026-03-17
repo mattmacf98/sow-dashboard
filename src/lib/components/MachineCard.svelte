@@ -7,6 +7,7 @@
     const localFqdn = $derived(mainPart?.localFqdn ? mainPart.localFqdn.replace('local.', '') : '');
     const isOnline = $derived(machineContext.onlineState === appApi.OnlineState.ONLINE);
     const isOffline = $derived(machineContext.onlineState === appApi.OnlineState.OFFLINE);
+    const canOpenApp = $derived(isOnline);
 </script>
 
 <li class="rounded-lg border border-gray-200 p-3">
@@ -35,17 +36,23 @@
     {:else if machineContext.error}
         <p class="text-sm text-red-500">Error: {machineContext.error}</p>
     {:else if localFqdn}
-        <a
-            href={`https://sanding-webapp_viam.viamapplications.com/machine/${localFqdn}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="mt-2 flex w-full items-center justify-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-        >
-            Open Operator App
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
-                <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
-            </svg>
-        </a>
+        <div title={canOpenApp ? undefined : 'Machine is offline'}>
+            <a
+                href={canOpenApp ? `https://sanding-webapp_viam.viamapplications.com/machine/${localFqdn}` : undefined}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-disabled={!canOpenApp}
+                onclick={canOpenApp ? undefined : (e) => e.preventDefault()}
+                class="mt-2 flex w-full items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 {canOpenApp
+                    ? 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500'
+                    : 'cursor-not-allowed bg-gray-200 text-gray-400'}"
+            >
+                Open Operator App
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
+                    <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
+                </svg>
+            </a>
+        </div>
     {/if}
 </li>
