@@ -1,5 +1,9 @@
 import { getContext, setContext } from "svelte";
+import { appApi } from "@viamrobotics/sdk";
 import { useAuthContext } from "./AuthContext.svelte";
+
+type MachineSummary = appApi.MachineSummary;
+type OnlineState = appApi.OnlineState;
 
 const KEY = Symbol('machine-context');
 
@@ -7,13 +11,18 @@ export type MachineContextValue = {
     get robotParts(): any[];
     get loading(): boolean;
     get error(): string | undefined;
+    get onlineState(): OnlineState;
 };
 
-export function createMachineContext(machineId: string): MachineContextValue {
+export function createMachineContext(machine: MachineSummary): MachineContextValue {
     const authContext = useAuthContext();
+    const machineId = machine.machineId;
     let robotParts = $state<any[]>([]);
     let loading = $state(false);
     let error = $state<string | undefined>(undefined);
+
+    const mainPartSummary = $derived(machine.partSummaries.find((p) => p.isMainPart));
+    const onlineState = $derived(mainPartSummary?.onlineState ?? appApi.OnlineState.UNSPECIFIED);
 
     $effect(() => {
         if (!authContext.client) {
@@ -40,6 +49,9 @@ export function createMachineContext(machineId: string): MachineContextValue {
         },
         get error() {
             return error;
+        },
+        get onlineState() {
+            return onlineState;
         }
     };
 
